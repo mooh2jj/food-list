@@ -1,9 +1,12 @@
 package foodlist.demo.db;
 
+import lombok.extern.slf4j.Slf4j;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+@Slf4j
 abstract public class MemoryDbRepositoyAbstract<T extends MemoryDbEntity> implements MemoryDbRepositoryIfs<T> {
 
     // db 데이터 arrayList 데이터로 대체
@@ -23,11 +26,13 @@ abstract public class MemoryDbRepositoyAbstract<T extends MemoryDbEntity> implem
         if (optionalEntity.isEmpty()) {
             // db에 데이터가 없는 경우
             index++;
+            log.info("{}", index);
             entity.setIndex(index);
             db.add(entity);
             return entity;
 
-        }else{
+        }
+        else{
             // db에 이미 데이터가 있는 경우
             var preIndex = optionalEntity.get().getIndex();
             entity.setIndex(preIndex);
@@ -42,13 +47,13 @@ abstract public class MemoryDbRepositoyAbstract<T extends MemoryDbEntity> implem
     public void deleteById(int index) {
         var optionalEntity = db.stream().filter(it -> it.getIndex() == index).findFirst();
 
-        if (optionalEntity.isEmpty()) {
+        if (optionalEntity.isPresent()) {
             db.remove(optionalEntity.get());
         }
     }
 
     @Override
-    public List<T> listAll() {
+    public List<T> findAll() {
         return db;
     }
 }

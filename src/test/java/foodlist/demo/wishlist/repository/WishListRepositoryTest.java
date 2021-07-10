@@ -47,8 +47,8 @@ public class WishListRepositoryTest {
         var saveEntity = wishListRepository.save(expected);
 
         Assertions.assertEquals("update test", saveEntity.getTitle());
-        System.out.println("size(): "+ wishListRepository.listAll().size());
-//        Assertions.assertEquals(1, wishListRepository.listAll().size());
+        System.out.println("size(): "+ wishListRepository.findAll().size());
+        Assertions.assertEquals(1, wishListRepository.findAll().size());
     }
 
     @Test
@@ -68,20 +68,20 @@ public class WishListRepositoryTest {
 
         wishListRepository.deleteById(1);
 
-        int count = wishListRepository.listAll().size();
+        int count = wishListRepository.findAll().size();
         System.out.println("count:" + count);
         Assertions.assertEquals(1, count);
     }
 
     @Test
-    public void listAllTest() {
+    public void findAllTest() {
         var wishListEntity1 = create();
         wishListRepository.save(wishListEntity1);
 
         var wishListEntity2 = create();
         wishListRepository.save(wishListEntity2);
 
-        int count = wishListRepository.listAll().size();
+        int count = wishListRepository.findAll().size();
         Assertions.assertEquals(2, count);
 
     }
