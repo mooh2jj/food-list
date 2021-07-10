@@ -6,6 +6,7 @@ import java.util.Optional;
 
 abstract public class MemoryDbRepositoyAbstract<T extends MemoryDbEntity> implements MemoryDbRepositoryIfs<T> {
 
+    // db 데이터 arrayList 데이터로 대체
     private final List<T> db = new ArrayList<>();
     private int index = 0;
 
