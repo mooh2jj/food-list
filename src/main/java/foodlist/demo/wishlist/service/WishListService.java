@@ -19,36 +19,32 @@ public class WishListService {
     private final NaverClient naverClient;
     private final WishListRepository wishListRepository;
 
-    public WishListDto search(String query) {
-
+    public WishListDto search(String query){
         // 지역검색
         var searchLocalReq = new SearchLocalReq();
         searchLocalReq.setQuery(query);
-
         var searchLocalRes = naverClient.searchLocal(searchLocalReq);
 
-        if (searchLocalRes.getTotal() > 0) {
-            var LocalItem = searchLocalRes.getItems().stream().findFirst().get();
-
-            var imageQuery = LocalItem.getTitle().replaceAll("<[^>]*>", "");
+        if(searchLocalRes.getTotal() > 0){
+            var localItem = searchLocalRes.getItems().stream().findFirst().get();
+            var imageQuery = localItem.getTitle().replaceAll("<[^>]*>","");
             var searchImageReq = new SearchImageReq();
             searchImageReq.setQuery(imageQuery);
 
             // 이미지 검색
             var searchImageRes = naverClient.searchImage(searchImageReq);
 
-            if (searchImageRes.getTotal() > 0) {
+            if(searchImageRes.getTotal() > 0){
                 var imageItem = searchImageRes.getItems().stream().findFirst().get();
 
                 // 결과를 리턴
                 var result = new WishListDto();
-                result.setTitle(LocalItem.getTitle());
-                result.setCategory(LocalItem.getCategory());
-                result.setAddress(LocalItem.getRoadAddress());
-                result.setRoadAddress(LocalItem.getRoadAddress());
-                result.setHomePageLink(LocalItem.getLink());
+                result.setTitle(localItem.getTitle());
+                result.setCategory(localItem.getCategory());
+                result.setAddress(localItem.getAddress());
+                result.setRoadAddress(localItem.getRoadAddress());
+                result.setHomePageLink(localItem.getLink());
                 result.setImageLink(imageItem.getLink());
-
                 return result;
             }
         }
@@ -62,8 +58,8 @@ public class WishListService {
         return entityToDto(saveEntity);
     }
 
-    // ModelMapper 사용해야만
-    private WishListEntity dtoToEntity(WishListDto wishListDto) {
+
+    private WishListEntity dtoToEntity(WishListDto wishListDto){
         var entity = new WishListEntity();
         entity.setIndex(wishListDto.getIndex());
         entity.setTitle(wishListDto.getTitle());
@@ -75,11 +71,10 @@ public class WishListService {
         entity.setVisit(wishListDto.isVisit());
         entity.setVisitCount(wishListDto.getVisitCount());
         entity.setLastVisitDate(wishListDto.getLastVisitDate());
-
         return entity;
     }
 
-    private WishListDto entityToDto(WishListEntity wishListEntity) {
+    private WishListDto entityToDto(WishListEntity wishListEntity){
         var dto = new WishListDto();
         dto.setIndex(wishListEntity.getIndex());
         dto.setTitle(wishListEntity.getTitle());
@@ -91,10 +86,8 @@ public class WishListService {
         dto.setVisit(wishListEntity.isVisit());
         dto.setVisitCount(wishListEntity.getVisitCount());
         dto.setLastVisitDate(wishListEntity.getLastVisitDate());
-
         return dto;
     }
-
 
     public List<WishListDto> findAll() {
         return wishListRepository.findAll()
@@ -107,13 +100,12 @@ public class WishListService {
         wishListRepository.deleteById(index);
     }
 
-    public void addVisit(int index) {
+    public void addVisit(int index){
         var wishItem = wishListRepository.findById(index);
-        if (wishItem.isPresent()) {
+        if(wishItem.isPresent()){
             var item = wishItem.get();
-
             item.setVisit(true);
-            item.setVisitCount(item.getVisitCount()+1 );
+            item.setVisitCount(item.getVisitCount()+1);
         }
     }
 }

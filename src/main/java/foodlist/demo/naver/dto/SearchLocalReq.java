@@ -1,10 +1,14 @@
 package foodlist.demo.naver.dto;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class SearchLocalReq {
 
     private String query = "";

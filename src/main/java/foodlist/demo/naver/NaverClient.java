@@ -29,53 +29,57 @@ public class NaverClient {
     @Value("${naver.url.search.image}")
     private String naverImageSearchUrl;
 
-    public SearchLocalRes searchLocal(SearchLocalReq searchLocalReq) {
+    public SearchLocalRes searchLocal(SearchLocalReq searchLocalReq){
         var uri = UriComponentsBuilder.fromUriString(naverLocalSearchUrl)
                 .queryParams(searchLocalReq.toMultiValueMap())
                 .build()
                 .encode()
                 .toUri();
 
-        var hearders = new HttpHeaders();
-        hearders.set("X-Naver-Client-Id", naverClientId);
-        hearders.set("X-Naver-Client-Secret", naverClientSecret);
-        hearders.setContentType(MediaType.APPLICATION_JSON);
+        var headers = new HttpHeaders();
+        headers.set("X-Naver-Client-Id", naverClientId);
+        headers.set("X-Naver-Client-Secret", naverClientSecret);
+        headers.setContentType(MediaType.APPLICATION_JSON);
 
-        var httpEntitry = new HttpEntity<>(hearders);
+        var httpEntity = new HttpEntity<>(headers);
         var responseType = new ParameterizedTypeReference<SearchLocalRes>(){};
+
 
         var responseEntity = new RestTemplate().exchange(
                 uri,
                 HttpMethod.GET,
-                httpEntitry,
+                httpEntity,
                 responseType
         );
 
         return responseEntity.getBody();
     }
 
-    public SearchImageRes searchImage(SearchImageReq searchImageReq) {
+
+    public SearchImageRes searchImage(SearchImageReq searchImageReq){
         var uri = UriComponentsBuilder.fromUriString(naverImageSearchUrl)
                 .queryParams(searchImageReq.toMultiValueMap())
                 .build()
                 .encode()
                 .toUri();
 
-        var hearders = new HttpHeaders();
-        hearders.set("X-Naver-Client-Id", naverClientId);
-        hearders.set("X-Naver-Client-Secret", naverClientSecret);
-        hearders.setContentType(MediaType.APPLICATION_JSON);
+        var headers = new HttpHeaders();
+        headers.set("X-Naver-Client-Id", naverClientId);
+        headers.set("X-Naver-Client-Secret", naverClientSecret);
+        headers.setContentType(MediaType.APPLICATION_JSON);
 
-        var httpEntitry = new HttpEntity<>(hearders);
+        var httpEntity = new HttpEntity<>(headers);
         var responseType = new ParameterizedTypeReference<SearchImageRes>(){};
+
 
         var responseEntity = new RestTemplate().exchange(
                 uri,
                 HttpMethod.GET,
-                httpEntitry,
+                httpEntity,
                 responseType
         );
 
         return responseEntity.getBody();
     }
+
 }
